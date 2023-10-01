@@ -7,6 +7,7 @@ pub const LuaVersion = enum {
     lua_52,
     lua_53,
     lua_54,
+    eris,
     // lua_jit,
 };
 
@@ -27,6 +28,7 @@ pub fn build(b: *Build) void {
             .lua_52 => .{ .path = "src/ziglua-5.2/lib.zig" },
             .lua_53 => .{ .path = "src/ziglua-5.3/lib.zig" },
             .lua_54 => .{ .path = "src/ziglua-5.4/lib.zig" },
+            .eris => .{ .path = "src/ziglua-eris/lib.zig" },
         },
     });
 
@@ -40,6 +42,7 @@ pub fn build(b: *Build) void {
             .lua_52 => std.SemanticVersion{ .major = 5, .minor = 2, .patch = 4 },
             .lua_53 => std.SemanticVersion{ .major = 5, .minor = 3, .patch = 6 },
             .lua_54 => std.SemanticVersion{ .major = 5, .minor = 4, .patch = 6 },
+            .eris => std.SemanticVersion{ .major = 5, .minor = 2, .patch = 4 },
         },
     };
     const lib = if (shared)
@@ -52,6 +55,7 @@ pub fn build(b: *Build) void {
         .lua_52 => "lib/lua-5.2/src",
         .lua_53 => "lib/lua-5.3/src",
         .lua_54 => "lib/lua-5.4/src",
+        .eris => "lib/eris/src",
     };
     lib.addIncludePath(.{ .path = lib_dir });
 
@@ -79,6 +83,7 @@ pub fn build(b: *Build) void {
         .lua_52 => &lua_52_source_files,
         .lua_53 => &lua_53_source_files,
         .lua_54 => &lua_54_source_files,
+        .eris => &eris_source_files,
     };
     for (lua_source_files) |file| {
         const path = std.fs.path.join(b.allocator, &.{ lib_dir, file }) catch unreachable;
@@ -100,6 +105,7 @@ pub fn build(b: *Build) void {
             .lua_52 => .{ .path = "src/ziglua-5.2/tests.zig" },
             .lua_53 => .{ .path = "src/ziglua-5.3/tests.zig" },
             .lua_54 => .{ .path = "src/ziglua-5.4/tests.zig" },
+            .eris => .{ .path = "src/eris/tests.zig" },
         },
         .optimize = optimize,
     });
@@ -171,6 +177,42 @@ const lua_51_source_files = [_][]const u8{
 };
 
 const lua_52_source_files = [_][]const u8{
+    "lapi.c",
+    "lcode.c",
+    "lctype.c",
+    "ldebug.c",
+    "ldo.c",
+    "ldump.c",
+    "lfunc.c",
+    "lgc.c",
+    "llex.c",
+    "lmem.c",
+    "lobject.c",
+    "lopcodes.c",
+    "lparser.c",
+    "lstate.c",
+    "lstring.c",
+    "ltable.c",
+    "ltm.c",
+    "lundump.c",
+    "lvm.c",
+    "lzio.c",
+    "lauxlib.c",
+    "lbaselib.c",
+    "lbitlib.c",
+    "lcorolib.c",
+    "ldblib.c",
+    "liolib.c",
+    "lmathlib.c",
+    "loslib.c",
+    "lstrlib.c",
+    "ltablib.c",
+    "loadlib.c",
+    "linit.c",
+};
+
+const eris_source_files = [_][]const u8{
+    "eris.c",
     "lapi.c",
     "lcode.c",
     "lctype.c",
